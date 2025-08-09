@@ -1,4 +1,4 @@
-# hello_world
+# flutter_practice
 
 A new Flutter project.
 

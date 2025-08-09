@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Dashboard2 extends StatelessWidget {
-  const Dashboard2({super.key});
+class Screen1 extends StatelessWidget {
+  const Screen1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Dashboard2 extends StatelessWidget {
                 style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
               ),
               TextSpan(
-                text: "App",
+                text: "App2",
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,

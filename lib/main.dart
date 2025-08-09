@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/Dashboard.dart';
+import 'package:hello_world/screens/Screen1.dart';
+import 'screens/Screen2.dart';
+import 'screens/ImageScreen.dart';
 
 void main()  => runApp(MyApp());
 
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: "My Flutter App", // Title of the app
         themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: Dashboard()
+      home: Imagescreen()
     );
   }
 }

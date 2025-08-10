@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/stateful_widgets/CustomRadioButton.dart';
 import 'package:hello_world/stateful_widgets/Details.dart';
+
+//for radio button
+//enum ProductTypeEnum { Downloadable, Deliverable }
 
 class MyForm extends StatefulWidget {
   const MyForm({super.key});
@@ -13,6 +17,7 @@ class _MyFormState extends State<MyForm> {
   final _productController = TextEditingController();
 
   bool? _isChecked, _listTileCheckBox = false;
+  ProductTypeEnum? _productTypeEnum;
 
   @override
   void initState() {
@@ -81,6 +86,81 @@ class _MyFormState extends State<MyForm> {
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,
+            ),
+
+            //Radio Button
+            Row(
+              children: [
+                Expanded(
+                  child: RadioListTile(
+                    contentPadding: EdgeInsets.all(0.0),
+                    value: ProductTypeEnum.Deliverable,
+                    groupValue: _productTypeEnum,
+                    tileColor: Colors.deepPurple.shade50,
+                    dense: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    title: Text(ProductTypeEnum.Deliverable.name),
+                    onChanged: (value) {
+                      setState(() {
+                        _productTypeEnum = value;
+                      });
+                    },
+                  ),
+                ),
+
+                SizedBox(width: 5.0),
+
+                Expanded(
+                  child: RadioListTile(
+                    contentPadding: EdgeInsets.all(0.0),
+                    value: ProductTypeEnum.Downloadable,
+                    groupValue: _productTypeEnum,
+                    tileColor: Colors.deepPurple.shade50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    dense: true,
+                    title: Text(ProductTypeEnum.Downloadable.name),
+                    onChanged: (value) {
+                      setState(() {
+                        _productTypeEnum = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 15.0),
+
+            Row(
+              children: [
+                MyRadioButton(
+                  title: ProductTypeEnum.Deliverable.name,
+                  value: ProductTypeEnum.Deliverable,
+                  productTypeEnum: _productTypeEnum,
+                  onChanged: (value) {
+                    setState(() {
+                      _productTypeEnum = value;
+                    });
+                  },
+                ),
+
+                SizedBox(width: 5.0),
+
+                MyRadioButton(
+                  title: ProductTypeEnum.Downloadable.name,
+                  value: ProductTypeEnum.Downloadable,
+                  productTypeEnum: _productTypeEnum,
+                  onChanged: (value) {
+                    setState(() {
+                      _productTypeEnum = value;
+                    });
+                  },
+                ),
+              ],
             ),
 
             SizedBox(height: 20.0),

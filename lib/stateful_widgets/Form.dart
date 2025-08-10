@@ -9,10 +9,10 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
-
   var _productName;
   final _productController = TextEditingController();
 
+  bool? _isChecked, _listTileCheckBox = false;
 
   @override
   void initState() {
@@ -20,7 +20,6 @@ class _MyFormState extends State<MyForm> {
 
     _productController.addListener(_updateText);
   }
-
 
   @override
   void dispose() {
@@ -53,35 +52,63 @@ class _MyFormState extends State<MyForm> {
                 border: OutlineInputBorder(),
               ),
             ),
-            
+
             Text("Product Name is: ${_productController.text}"),
 
-            SizedBox(height: 20.0,),
-            
-            submitFormButton(context)
+            //Two types of checkbox...
+
+            // 1. Checkbox
+            Checkbox(
+              activeColor: Colors.deepPurple,
+              checkColor: Colors.white,
+              tristate: true,
+              value: _isChecked,
+              onChanged: (value) {
+                setState(() {
+                  _isChecked = value;
+                });
+                print("Checkbox value: $value");
+              },
+            ),
+
+            //2. Checkbox List Tile
+            CheckboxListTile(
+              value: _listTileCheckBox,
+              title: Text("Checkbox List Tile"),
+              onChanged: (value) {
+                setState(() {
+                  _listTileCheckBox = value;
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+
+            SizedBox(height: 20.0),
+
+            submitFormButton(context),
           ],
-        )
+        ),
       ),
     );
   }
 
   OutlinedButton submitFormButton(BuildContext context) {
     return OutlinedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return FormDetails(productName: _productController.text,);
-              },
-            ),
-          );
-        },
-        style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
-        child: Text(
-          "Submit Form".toUpperCase(),
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      );
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return FormDetails(productName: _productController.text);
+            },
+          ),
+        );
+      },
+      style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
+      child: Text(
+        "Submit Form".toUpperCase(),
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }

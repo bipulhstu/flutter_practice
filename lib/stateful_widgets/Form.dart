@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/models/product_model.dart';
 import 'package:hello_world/stateful_widgets/CustomRadioButton.dart';
 import 'package:hello_world/stateful_widgets/Details.dart';
 
@@ -15,7 +16,7 @@ class MyForm extends StatefulWidget {
 class _MyFormState extends State<MyForm> {
   //Constructor of the class
   _MyFormState() {
-    _selectedVal = _productSizesList.first;
+    _dropdownSelectedValue = _productSizesList.first;
   }
 
   var _productName;
@@ -26,7 +27,9 @@ class _MyFormState extends State<MyForm> {
 
   // for dropdown
   final _productSizesList = ["Small", "Medium", "Large", "XLarge"];
-  String? _selectedVal;
+  String? _dropdownSelectedValue;
+  final _formKey = GlobalKey<FormState>();
+  ProductDetails productDetails = ProductDetails();
 
   @override
   void initState() {
@@ -55,165 +58,180 @@ class _MyFormState extends State<MyForm> {
         padding: EdgeInsets.all(20),
         child: ListView(
           children: [
-            TextFormField(
-              /*onChanged: (value){
+            //Form
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    /*onChanged: (value){
                 _updateText(value);
               },*/
-              controller: _productController,
-              decoration: InputDecoration(
-                labelText: "Product Name",
-                prefixIcon: Icon(Icons.verified_user_outlined),
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            Text("Product Name is: ${_productController.text}"),
-
-            //Two types of checkbox...
-
-            // 1. Checkbox
-            Checkbox(
-              activeColor: Colors.deepPurple,
-              checkColor: Colors.white,
-              tristate: true,
-              value: _isChecked,
-              onChanged: (value) {
-                setState(() {
-                  _isChecked = value;
-                });
-                print("Checkbox value: $value");
-              },
-            ),
-
-            //2. Checkbox List Tile
-            CheckboxListTile(
-              value: _listTileCheckBox,
-              title: Text("Checkbox List Tile"),
-              onChanged: (value) {
-                setState(() {
-                  _listTileCheckBox = value;
-                });
-              },
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-
-            //Radio Button
-            Row(
-              children: [
-                Expanded(
-                  child: RadioListTile(
-                    contentPadding: EdgeInsets.all(0.0),
-                    value: ProductTypeEnum.Deliverable,
-                    groupValue: _productTypeEnum,
-                    tileColor: Colors.deepPurple.shade50,
-                    dense: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter product name";
+                      } else {
+                        return null;
+                      }
+                    },
+                    controller: _productController,
+                    decoration: InputDecoration(
+                      labelText: "Product Name",
+                      prefixIcon: Icon(Icons.verified_user_outlined),
+                      border: OutlineInputBorder(),
                     ),
-                    title: Text(ProductTypeEnum.Deliverable.name),
+                  ),
+
+                  Text("Product Name is: ${_productController.text}"),
+
+                  //Two types of checkbox...
+
+                  // 1. Checkbox
+                  Checkbox(
+                    activeColor: Colors.deepPurple,
+                    checkColor: Colors.white,
+                    tristate: true,
+                    value: _isChecked,
                     onChanged: (value) {
                       setState(() {
-                        _productTypeEnum = value;
+                        _isChecked = value;
+                      });
+                      print("Checkbox value: $value");
+                    },
+                  ),
+
+                  //2. Checkbox List Tile
+                  CheckboxListTile(
+                    value: _listTileCheckBox,
+                    title: Text("Checkbox List Tile"),
+                    onChanged: (value) {
+                      setState(() {
+                        _listTileCheckBox = value;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+
+                  //Radio Button
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          contentPadding: EdgeInsets.all(0.0),
+                          value: ProductTypeEnum.Deliverable,
+                          groupValue: _productTypeEnum,
+                          tileColor: Colors.deepPurple.shade50,
+                          dense: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          title: Text(ProductTypeEnum.Deliverable.name),
+                          onChanged: (value) {
+                            setState(() {
+                              _productTypeEnum = value;
+                            });
+                          },
+                        ),
+                      ),
+
+                      SizedBox(width: 5.0),
+
+                      Expanded(
+                        child: RadioListTile(
+                          contentPadding: EdgeInsets.all(0.0),
+                          value: ProductTypeEnum.Downloadable,
+                          groupValue: _productTypeEnum,
+                          tileColor: Colors.deepPurple.shade50,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          dense: true,
+                          title: Text(ProductTypeEnum.Downloadable.name),
+                          onChanged: (value) {
+                            setState(() {
+                              _productTypeEnum = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 15.0),
+
+                  Row(
+                    children: [
+                      MyRadioButton(
+                        title: ProductTypeEnum.Deliverable.name,
+                        value: ProductTypeEnum.Deliverable,
+                        productTypeEnum: _productTypeEnum,
+                        onChanged: (value) {
+                          setState(() {
+                            _productTypeEnum = value;
+                          });
+                        },
+                      ),
+
+                      SizedBox(width: 5.0),
+
+                      MyRadioButton(
+                        title: ProductTypeEnum.Downloadable.name,
+                        value: ProductTypeEnum.Downloadable,
+                        productTypeEnum: _productTypeEnum,
+                        onChanged: (value) {
+                          setState(() {
+                            _productTypeEnum = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 10.0),
+
+                  DropdownButton(
+                    value: _dropdownSelectedValue,
+                    items: _productSizesList.map((e) {
+                      return DropdownMenuItem(value: e, child: Text(e));
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _dropdownSelectedValue = value;
                       });
                     },
                   ),
-                ),
 
-                SizedBox(width: 5.0),
-
-                Expanded(
-                  child: RadioListTile(
-                    contentPadding: EdgeInsets.all(0.0),
-                    value: ProductTypeEnum.Downloadable,
-                    groupValue: _productTypeEnum,
-                    tileColor: Colors.deepPurple.shade50,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    dense: true,
-                    title: Text(ProductTypeEnum.Downloadable.name),
+                  DropdownButtonFormField(
+                    value: _dropdownSelectedValue,
+                    items: _productSizesList.map((e) {
+                      return DropdownMenuItem(value: e, child: Text(e));
+                    }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        _productTypeEnum = value;
+                        _dropdownSelectedValue = value;
                       });
                     },
+                    icon: Icon(
+                      Icons.arrow_drop_down_circle,
+                      color: Colors.deepPurple,
+                    ),
+                    dropdownColor: Colors.deepPurple.shade50,
+                    decoration: InputDecoration(
+                      labelText: "Select Product Size",
+                      prefixIcon: Icon(
+                        Icons.accessibility_new_rounded,
+                        color: Colors.deepPurple,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
-              ],
-            ),
 
-            SizedBox(height: 15.0),
+                  SizedBox(height: 20.0),
 
-            Row(
-              children: [
-                MyRadioButton(
-                  title: ProductTypeEnum.Deliverable.name,
-                  value: ProductTypeEnum.Deliverable,
-                  productTypeEnum: _productTypeEnum,
-                  onChanged: (value) {
-                    setState(() {
-                      _productTypeEnum = value;
-                    });
-                  },
-                ),
-
-                SizedBox(width: 5.0),
-
-                MyRadioButton(
-                  title: ProductTypeEnum.Downloadable.name,
-                  value: ProductTypeEnum.Downloadable,
-                  productTypeEnum: _productTypeEnum,
-                  onChanged: (value) {
-                    setState(() {
-                      _productTypeEnum = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-
-            SizedBox(height: 10.0),
-
-            DropdownButton(
-              value: _selectedVal,
-              items: _productSizesList.map((e) {
-                return DropdownMenuItem(value: e, child: Text(e));
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedVal = value;
-                });
-              },
-            ),
-
-            DropdownButtonFormField(
-              value: _selectedVal,
-              items: _productSizesList.map((e) {
-                return DropdownMenuItem(value: e, child: Text(e));
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedVal = value;
-                });
-              },
-              icon: Icon(
-                Icons.arrow_drop_down_circle,
-                color: Colors.deepPurple,
-              ),
-              dropdownColor: Colors.deepPurple.shade50,
-              decoration: InputDecoration(
-                labelText: "Select Product Size",
-                prefixIcon: Icon(
-                  Icons.accessibility_new_rounded,
-                  color: Colors.deepPurple,
-                ),
-                border: OutlineInputBorder()
+                  submitFormButton(context),
+                ],
               ),
             ),
-
-            SizedBox(height: 20.0),
-
-            submitFormButton(context),
           ],
         ),
       ),
@@ -223,14 +241,22 @@ class _MyFormState extends State<MyForm> {
   OutlinedButton submitFormButton(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return FormDetails(productName: _productController.text);
-            },
-          ),
-        );
+        if (_formKey.currentState!.validate()) {
+          productDetails.productName = _productController.text;
+          productDetails.productSize = _dropdownSelectedValue!;
+          productDetails.productType = ProductTypeEnum.Downloadable.name;
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return FormDetails(productDetails: productDetails);
+              },
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text("Processing Data")));
+        }
       },
       style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
       child: Text(

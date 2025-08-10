@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_world/screens/AppBar.dart';
 import 'package:hello_world/screens/Button.dart';
 import 'package:hello_world/screens/ContainerScreen.dart';
+import 'package:hello_world/screens/CustomWidgets.dart';
 import 'package:hello_world/screens/FloatingActionButton.dart';
 import 'package:hello_world/screens/IconScreen.dart';
 import 'package:hello_world/screens/ListView.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: "My Flutter App", // Title of the app
         themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: StackPositioned2()
+      home: CustomWidgets()
     );
   }
 }

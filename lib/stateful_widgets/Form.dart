@@ -13,11 +13,20 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
+  //Constructor of the class
+  _MyFormState() {
+    _selectedVal = _productSizesList.first;
+  }
+
   var _productName;
   final _productController = TextEditingController();
 
   bool? _isChecked, _listTileCheckBox = false;
   ProductTypeEnum? _productTypeEnum;
+
+  // for dropdown
+  final _productSizesList = ["Small", "Medium", "Large", "XLarge"];
+  String? _selectedVal;
 
   @override
   void initState() {
@@ -161,6 +170,45 @@ class _MyFormState extends State<MyForm> {
                   },
                 ),
               ],
+            ),
+
+            SizedBox(height: 10.0),
+
+            DropdownButton(
+              value: _selectedVal,
+              items: _productSizesList.map((e) {
+                return DropdownMenuItem(value: e, child: Text(e));
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedVal = value;
+                });
+              },
+            ),
+
+            DropdownButtonFormField(
+              value: _selectedVal,
+              items: _productSizesList.map((e) {
+                return DropdownMenuItem(value: e, child: Text(e));
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedVal = value;
+                });
+              },
+              icon: Icon(
+                Icons.arrow_drop_down_circle,
+                color: Colors.deepPurple,
+              ),
+              dropdownColor: Colors.deepPurple.shade50,
+              decoration: InputDecoration(
+                labelText: "Select Product Size",
+                prefixIcon: Icon(
+                  Icons.accessibility_new_rounded,
+                  color: Colors.deepPurple,
+                ),
+                border: OutlineInputBorder()
+              ),
             ),
 
             SizedBox(height: 20.0),
